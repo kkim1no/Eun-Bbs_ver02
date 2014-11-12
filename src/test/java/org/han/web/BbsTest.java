@@ -1,4 +1,4 @@
-package han.org.web;
+package org.han.web;
 
 import javax.inject.Inject;
 
