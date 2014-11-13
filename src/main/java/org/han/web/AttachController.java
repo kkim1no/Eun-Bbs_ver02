@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
@@ -30,6 +29,7 @@ public class AttachController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AttachController.class);
 
+
 	private final static String UPLOAD_DIR = "C:\\zzz\\";
 
 
@@ -50,7 +50,8 @@ public class AttachController {
 		ImageIO.write(thumbnailImage, "jpg", outputFile);
 	}
 
-	@RequestMapping("/upload")
+	//한글깨짐 처리 produces="text/html;charset=UTF-8"
+	@RequestMapping(value="/upload", produces="text/html;charset=UTF-8")
 	@ResponseBody
 	public String uploadFile(MultipartFile file) throws Exception {
 
@@ -60,6 +61,8 @@ public class AttachController {
 
 		byte[] buffer = new byte[1024 * 8];
 		String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+		
+		//한글 깨짐 처리 
 		fileName = new String(fileName.getBytes("8859_1"),"UTF-8");
 		String suffix = fileName.substring(fileName.lastIndexOf("."));
 		
@@ -68,10 +71,6 @@ public class AttachController {
 		InputStream in = file.getInputStream();
 
 		File uploadedFile = new File(UPLOAD_DIR + fileName);
-		
-		
-
-		System.out.println("fileName: "+fileName);
 		
 		OutputStream fos = new FileOutputStream(uploadedFile);
 		buffer(in,fos);

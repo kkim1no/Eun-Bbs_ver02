@@ -6,19 +6,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Han's Create</title>
 
-	<style>
-	.uploadUL {
-	  list-style: none;
-	}
-	.uploadUL li {
-	  float: left;
-	}
-	
-	.uploadUL li .thumb{
-	  width:100px;
-	  height:100px;
-	}
-	</style>
+<style>
+
+.thumb {
+	list-style: none;
+	float: left;
+	width: 100px;
+	height: 100px;
+}
+</style>
 
 </head>
 <body>
@@ -36,6 +32,7 @@ Cont<input name="cont" type ="text">
 <ul class="uploadUL"> <!-- file upload  -->
 
 </ul>
+
 <input id="input_btn" type="submit" value="Submit">
 </form>
 </div>
@@ -60,7 +57,7 @@ function updateResult(data){
 }
 </script>
 
-<form target="zero" action="/hanBbs/file/upload" method="post" enctype="multipart/form-data">
+<form target="zero" action="/hanBbs/file/upload" method="post" enctype="multipart/form-data" >
 	<input type='file' name='file'><input type='submit' value="UPLOAD">
 </form>
 

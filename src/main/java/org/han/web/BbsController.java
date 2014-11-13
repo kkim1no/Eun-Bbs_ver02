@@ -77,6 +77,11 @@ public class BbsController {
 		public void readPage(@ModelAttribute BbsVO vo, Model model){
 			model.addAttribute("bbs",service.read(vo));
 //			없는 페이지 오류 처리해야 함 
+			//파일 이름이 여러개 일때 ','
+			
+			
+			
+			
 			
 		}
 	
