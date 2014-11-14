@@ -90,11 +90,12 @@ public class AttachController {
 				+ ", suffix:'" + suffix + "'}";
 
 		String str = "<script>parent.updateResult(" + jsObjStr + ");</script>";
-
+		logger.info("str위에 : "+fileName);
 		return str;
 
 	}
 
+	//"application/octest-stream" 무조건 다운로드 받기
 	@RequestMapping(value = "/down", produces = {"application/octest-stream"})
 	public @ResponseBody byte[] downFile(
 			@RequestParam(value = "src", defaultValue = "") String path,
@@ -103,6 +104,8 @@ public class AttachController {
 		if (path.equals("")) {
 			return null;
 		}
+		
+		//다운받을 파일 이름 지정해 주기
 		response.addHeader("Content-Disposition", "attachment; filename =" + path);
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -116,6 +119,7 @@ public class AttachController {
 	public @ResponseBody byte[] viewFile(@PathVariable("path") String path)
 			throws Exception {
 
+		logger.info("view: "+path);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		InputStream fin = new FileInputStream(UPLOAD_DIR + path + ".jpg");
 		buffer(fin,bos);

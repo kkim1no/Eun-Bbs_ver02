@@ -62,6 +62,8 @@
 
    function _list(file){
 	   
+	   alert(file);  
+	   
 	   console.log(file)
 	   if(file.length ==0){
 		   alert("첨부파일 없음");   
