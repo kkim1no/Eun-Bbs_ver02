@@ -62,8 +62,7 @@
 
    function _list(file){
 	   
-	   alert(file);  
-	   
+   
 	   console.log(file)
 	   if(file.length ==0){
 		   alert("첨부파일 없음");   
@@ -75,7 +74,8 @@
 		   }
 		   
       var name = file.split(",");
-      for(var i=0 ; len=i<name.length,len; i++ )      
+      for(var i=0 ; len=i<name.length,len; i++ )  
+    	  /* -1은 존재하지 않는다면을 뜻함 */
          if (name[i].indexOf('.jpg')!= -1){
          $("#downloadUL").append("<p><a href='/hanBbs/file/down?src="+name[i]+"'><image class='thumb' data-src='"+name[i]+"' src='/hanBbs/file/view/"+name[i]+"'/></a></p>");
          }else{

@@ -47,10 +47,10 @@ function updateResult(data){
 		$(".uploadUL").append("<input type='hidden' name=contfile value='"+data.fileName+"'></p>");
 		
 		if(data.suffix == '.jpg'){
-			$(".uploadUL").append("<li><a href='/hanBbs/file/down?src="+data.fileName+"'><image class='thumb' src='/hanBbs/file/view/"+data.fileName+"'/></li>");
+			$(".uploadUL").append("<p><a href='/hanBbs/file/down?src="+data.fileName+"'><image class='thumb' src='/hanBbs/file/view/"+data.fileName+"'/></p>");
 			/* $(".uploadUL").append("<li><image class='thumb' data-src='"+data.fileName+"' src='/web/file/view/"+ data.fileName+"'/></a></li>"); */
 		}else{
-			$(".uploadUL").append("<li><a href='/hanBbs/file/down?src="+data.fileName+"'><image class='thumb' data-src='"+data.fileName+"' src='/resources/images/iconsets9.jpg'/></a></li>");
+			$(".uploadUL").append("<p><a href='/hanBbs/file/down?src="+data.fileName+"'><image class='thumb' data-src='"+data.fileName+"' src='/resources/images/iconsets9.jpg'/></a></p>");
 		}
 
 

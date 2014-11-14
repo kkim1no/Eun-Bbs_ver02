@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -29,9 +30,7 @@ public class AttachController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AttachController.class);
 
-
 	private final static String UPLOAD_DIR = "C:\\zzz\\";
-
 
 	private void createThumbnail(File origin) throws Exception {
 
@@ -45,13 +44,12 @@ public class AttachController {
 				thumbnailImage.getHeight(), null);
 
 		File outputFile = new File(UPLOAD_DIR + "s_" + origin.getName());
-		
 
 		ImageIO.write(thumbnailImage, "jpg", outputFile);
 	}
 
-	//한글깨짐 처리 produces="text/html;charset=UTF-8"
-	@RequestMapping(value="/upload", produces="text/html;charset=UTF-8")
+	// 한글깨짐 처리 produces="text/html;charset=UTF-8"
+	@RequestMapping(value = "/upload", produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String uploadFile(MultipartFile file) throws Exception {
 
@@ -61,19 +59,19 @@ public class AttachController {
 
 		byte[] buffer = new byte[1024 * 8];
 		String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-		
-		//한글 깨짐 처리 
-		fileName = new String(fileName.getBytes("8859_1"),"UTF-8");
+
+		// 한글 깨짐 처리
+		fileName = new String(fileName.getBytes("8859_1"), "UTF-8");
 		String suffix = fileName.substring(fileName.lastIndexOf("."));
-		
+
 		logger.info("SUFFIX :" + suffix);
 
 		InputStream in = file.getInputStream();
 
 		File uploadedFile = new File(UPLOAD_DIR + fileName);
-		
+
 		OutputStream fos = new FileOutputStream(uploadedFile);
-		buffer(in,fos);
+		buffer(in, fos);
 		fos.flush();
 		fos.close();
 
@@ -90,13 +88,13 @@ public class AttachController {
 				+ ", suffix:'" + suffix + "'}";
 
 		String str = "<script>parent.updateResult(" + jsObjStr + ");</script>";
-		logger.info("str위에 : "+fileName);
+		logger.info("str위에 : " + fileName);
 		return str;
 
 	}
 
-	//"application/octest-stream" 무조건 다운로드 받기
-	@RequestMapping(value = "/down", produces = {"application/octest-stream"})
+	// "application/octest-stream" 마임타입 상관없이 무조건 다운로드 받기
+	@RequestMapping(value = "/down", produces = { "application/octest-stream" })
 	public @ResponseBody byte[] downFile(
 			@RequestParam(value = "src", defaultValue = "") String path,
 			HttpServletResponse response) throws Exception {
@@ -104,14 +102,20 @@ public class AttachController {
 		if (path.equals("")) {
 			return null;
 		}
-		
-		//다운받을 파일 이름 지정해 주기
-		response.addHeader("Content-Disposition", "attachment; filename =" + path);
+
+		// 다운받을 파일 이름에서 UUID 제거하기
+		int last = path.length();
+		int first = path.indexOf("_") + 1;
+		String fileName = path.substring(first, last);
+
+		// 다운받을 파일 이름 지정해 주기
+		response.addHeader("Content-Disposition", "attachment; filename ="
+				+ fileName);
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		InputStream fin = new FileInputStream(UPLOAD_DIR + path);
-		buffer(fin,bos);
-		
+		buffer(fin, bos);
+
 		return bos.toByteArray();
 	}
 
@@ -119,20 +123,19 @@ public class AttachController {
 	public @ResponseBody byte[] viewFile(@PathVariable("path") String path)
 			throws Exception {
 
-		logger.info("view: "+path);
+		logger.info("view: " + path);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		InputStream fin = new FileInputStream(UPLOAD_DIR + path + ".jpg");
-		buffer(fin,bos);
+		buffer(fin, bos);
 		return bos.toByteArray();
 	}
-	
-	
-	//===================util=======================
-	
-	public void buffer(InputStream fin, OutputStream fos) throws Exception{
-		
+
+	// ===================util=======================
+
+	public void buffer(InputStream fin, OutputStream fos) throws Exception {
+
 		byte[] buffer = new byte[1024 * 8];
-		
+
 		while (true) {
 			int count = fin.read(buffer);
 			if (count == -1) {
@@ -141,9 +144,9 @@ public class AttachController {
 			fos.write(buffer, 0, count);
 		}
 		fin.close();
-		
+
 	}
-	
+
 	private boolean isImage(String fileName, String suffix) {
 
 		if (suffix.contains(".jpg")) {
@@ -151,6 +154,5 @@ public class AttachController {
 		}
 		return false;
 	}
-	
 
 }
